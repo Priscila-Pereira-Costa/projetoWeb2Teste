@@ -1,0 +1,29 @@
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:password@localhost:3306/projetoWeb2" 
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement()) // ID único e autoincrementado
+  name      String    // Nome do usuário
+  email     String    @unique // Email único
+  tel       String?   // Contato opcional (pode ser telefone ou outro meio)
+  createdAt DateTime  @default(now()) // Data de criação do usuário
+  projects  Project[] // Relacionamento com projetos (um para muitos)
+}
+
+model Project {
+  id          Int      @id @default(autoincrement()) // ID único e autoincrementado
+  name        String   // Nome do projeto
+  description String?  // Descrição opcional do projeto
+  link        String   // Link para o repositório
+  language    String   // Linguagem principal do projeto
+  userId      Int      // ID do usuário relacionado (chave estrangeira)
+  user        User     @relation(fields: [userId], references: [id]) // Relacionamento com o usuário
+  createdAt   DateTime @default(now()) // Data de criação do projeto
+}
